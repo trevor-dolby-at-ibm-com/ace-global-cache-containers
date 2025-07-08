@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: global-cache-setup
+  namespace: ace
+data:
+  server.components.yaml: |
+    serverComponentsVersion: 1
+    NodeJS: false
+    ResourceManagers:
+      GlobalCache: true
+  server.conf.yaml: |
+    ResourceManagers:
+      GlobalCache:
+        cacheOn: true
+        cacheServerName: 'singleContainer'
+        catalogServiceEndPoints: '172.30.0.100:2800'
+        catalogDomainName: 'WMB_singleContainer'
+        catalogClusterEndPoints: 'singleContainer:172.30.0.100:2803:2801'
+        enableCatalogService: true
+        enableContainerService: true
+        enableJMX: true  
+        #listenerHost: 'localhost'
+        listenerPort: 2800

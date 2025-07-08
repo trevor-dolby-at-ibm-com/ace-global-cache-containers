@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ace-reader-pod
+  namespace: ace
+  labels:
+    app: ace-reader-pod
+spec:
+  containers:
+  - name: ace-reader
+    imagePullPolicy: Always
+    image: tdolby/experimental:ace-map-reader-1
+    env:
+    - name: 'LICENSE'
+      value: 'accept'
+    volumeMounts:
+    - name: cache-client-scy-volume
+      mountPath: /var/configmap
+  volumes:
+  - name: cache-client-scy-volume
+    configMap:
+      name: cache-client-scy
+  restartPolicy: Never

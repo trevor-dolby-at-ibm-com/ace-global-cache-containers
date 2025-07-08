@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cache-client-scy
+  namespace: ace
+data:
+  server.components.yaml: |
+    serverComponentsVersion: 1
+    NodeJS: false
+    ResourceManagers:
+      GlobalCache: true
+  server.conf.yaml: |
+    ResourceManagers:
+      GlobalCache:
+        cacheOn: true
+        catalogServiceEndPoints: 'gc-1.gc.dolbyfamily.org:2800,gc-2.gc.dolbyfamily.org:2800,gc-3.gc.dolbyfamily.org:2800'
+        catalogDomainName: 'three_six_domain'
+        catalogClusterEndPoints: 'gc_1_catalog:gc-1.gc.dolbyfamily.org:2803:2801,gc_2_catalog:gc-2.gc.dolbyfamily.org:2803:2801,gc_3_catalog:gc-3.gc.dolbyfamily.org:2803:2801'
+        objectGridCustomFile: '/var/configmap/objectgrid.xml'
+        deploymentPolicyCustomFile: '/var/configmap/deployment.xml'
+  objectgrid.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <objectGridConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://ibm.com/ws/objectgrid/config ../objectGrid.xsd"
+      xmlns="http://ibm.com/ws/objectgrid/config">
+     <objectGrids>
+      <objectGrid name="WMB">
+       <backingMap name=".*" template="true" timeToLive="0" ttlEvictorType="LAST_UPDATE_TIME" lockStrategy="OPTIMISTIC_NO_VERSIONING" nearCacheInvalidationEnabled="false" copyMode="COPY_TO_BYTES"/>
+      </objectGrid>
+     </objectGrids>
+    </objectGridConfig>
+  deployment.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <deploymentPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://ibm.com/ws/objectgrid/deploymentPolicy ../deploymentPolicy.xsd" 
+      xmlns="http://ibm.com/ws/objectgrid/deploymentPolicy"> 
+     <objectgridDeployment objectgridName="WMB">
+      <mapSet name="mapSet" numberOfPartitions="13" minSyncReplicas="0" maxSyncReplicas="1">
+       <map ref=".*"/>
+       <zoneMetadata>
+        <shardMapping shard="P" zoneRuleRef="wmbRule"/>
+        <shardMapping shard="S" zoneRuleRef="wmbRule"/>
+        <zoneRule name="wmbRule" exclusivePlacement="false">
+         <zone name="WMBZone" />
+        </zoneRule>
+       </zoneMetadata>
+      </mapSet>
+     </objectgridDeployment>
+    </deploymentPolicy>

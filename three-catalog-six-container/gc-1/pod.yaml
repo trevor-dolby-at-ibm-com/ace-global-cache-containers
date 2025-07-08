@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gc-1-pod
+  namespace: ace
+  labels:
+    app: gc-1-pod
+spec:
+  containers:
+  - name: gc-1-catalog
+    imagePullPolicy: Always
+    image: tdolby/experimental:ace-configurable-12.0.7.0-1
+    env:
+    - name: 'LICENSE'
+      value: 'accept'
+    volumeMounts:
+    - name: gc-1-catalog-scy-volume
+      mountPath: /var/configmap
+  - name: gc-1-container-1
+    imagePullPolicy: Always
+    image: tdolby/experimental:ace-configurable-12.0.7.0-1
+    env:
+    - name: 'LICENSE'
+      value: 'accept'
+    - name: 'ACE_SLEEP_ON_STARTUP'
+      value: '120'
+    volumeMounts:
+    - name: gc-1-container-1-scy-volume
+      mountPath: /var/configmap
+  - name: gc-1-container-2
+    imagePullPolicy: Always
+    image: tdolby/experimental:ace-configurable-12.0.7.0-1
+    env:
+    - name: 'LICENSE'
+      value: 'accept'
+    - name: 'ACE_SLEEP_ON_STARTUP'
+      value: '120'
+    volumeMounts:
+    - name: gc-1-container-2-scy-volume
+      mountPath: /var/configmap
+  volumes:
+  - name: gc-1-catalog-scy-volume
+    configMap:
+      name: gc-1-catalog-scy
+  - name: gc-1-container-1-scy-volume
+    configMap:
+      name: gc-1-container-1-scy
+  - name: gc-1-container-2-scy-volume
+    configMap:
+      name: gc-1-container-2-scy
+  restartPolicy: Never

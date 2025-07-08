@@ -1,0 +1,30 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ace-pod-service
+  namespace: ace
+spec:
+  clusterIP: 172.30.0.100
+  clusterIPs:
+    - 172.30.0.100
+  ports:
+    - name: cache-port-2800
+      protocol: TCP
+      port: 2800
+      targetPort: 2800
+    - name: cache-port-2801
+      protocol: TCP
+      port: 2801
+      targetPort: 2801
+    - name: cache-port-2802
+      protocol: TCP
+      port: 2802
+      targetPort: 2802
+    - name: cache-port-2803
+      protocol: TCP
+      port: 2803
+      targetPort: 2803
+  selector:
+    app: ace-pod
+  type: ClusterIP
+  sessionAffinity: None

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ace-writer-lots
+  namespace: ace
+spec:
+  selector:
+    matchLabels:
+      app: ace-writer-lots
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        app: ace-writer-lots
+    spec:
+      containers:
+      - name: ace-writer-lots
+        imagePullPolicy: IfNotPresent
+        image: tdolby/experimental:ace-map-writer-lots-1
+        env:
+        - name: 'LICENSE'
+          value: 'accept'
+        volumeMounts:
+        - name: cache-client-scy-volume
+          mountPath: /var/configmap
+      volumes:
+      - name: cache-client-scy-volume
+        configMap:
+          name: cache-client-scy
+      serviceAccountName: 'runasanyuid'
+      securityContext:
+        seLinuxOptions:
+          level: 's0:c26,c10'

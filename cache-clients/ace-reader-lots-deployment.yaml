@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ace-reader-lots
+  namespace: ace
+spec:
+  selector:
+    matchLabels:
+      app: ace-reader-lots
+  replicas: 20
+  template:
+    metadata:
+      labels:
+        app: ace-reader-lots
+    spec:
+      containers:
+      - name: ace-reader-lots
+        imagePullPolicy: IfNotPresent
+        image: tdolby/experimental:ace-map-reader-lots-1
+        resources:
+          limits:
+            cpu: "0.05"
+          requests:
+            cpu: "0.05"
+        env:
+        - name: 'LICENSE'
+          value: 'accept'
+        volumeMounts:
+        - name: cache-client-scy-volume
+          mountPath: /var/configmap
+      volumes:
+      - name: cache-client-scy-volume
+        configMap:
+          name: cache-client-scy
+      serviceAccountName: 'runasanyuid'
+      securityContext:
+        seLinuxOptions:
+          level: 's0:c26,c10'

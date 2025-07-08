@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ace-writer-lots-pod
+  namespace: ace
+  labels:
+    app: ace-writer-lots-pod
+spec:
+  containers:
+  - name: ace-writer
+    imagePullPolicy: Always
+    image: tdolby/experimental:ace-map-writer-lots-1
+    env:
+    - name: 'LICENSE'
+      value: 'accept'
+    volumeMounts:
+    - name: cache-client-scy-volume
+      mountPath: /var/configmap
+  volumes:
+  - name: cache-client-scy-volume
+    configMap:
+      name: cache-client-scy
+  restartPolicy: Never

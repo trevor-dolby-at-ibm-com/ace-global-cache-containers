@@ -1,0 +1,62 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gc-1-fixed-ip-service
+  namespace: ace
+spec:
+  clusterIP: 172.30.0.101
+  clusterIPs:
+    - 172.30.0.101
+  ports:
+    - name: cache-port-2800
+      protocol: TCP
+      port: 2800
+      targetPort: 2800
+    - name: cache-port-2801
+      protocol: TCP
+      port: 2801
+      targetPort: 2801
+    - name: cache-port-2802
+      protocol: TCP
+      port: 2802
+      targetPort: 2802
+    - name: cache-port-2803
+      protocol: TCP
+      port: 2803
+      targetPort: 2803
+    - name: cache-port-2804
+      protocol: TCP
+      port: 2804
+      targetPort: 2804
+    - name: cache-port-2805
+      protocol: TCP
+      port: 2805
+      targetPort: 2805
+    - name: cache-port-2806
+      protocol: TCP
+      port: 2806
+      targetPort: 2806
+    - name: cache-port-2807
+      protocol: TCP
+      port: 2807
+      targetPort: 2807
+    - name: cache-port-2808
+      protocol: TCP
+      port: 2808
+      targetPort: 2808
+    - name: cache-port-2809
+      protocol: TCP
+      port: 2809
+      targetPort: 2809
+    - name: cache-port-2810
+      protocol: TCP
+      port: 2810
+      targetPort: 2810
+    - name: cache-port-2811
+      protocol: TCP
+      port: 2811
+      targetPort: 2811
+  selector:
+    app: gc-1-pod
+  type: ClusterIP
+  sessionAffinity: None
